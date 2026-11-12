@@ -4,6 +4,7 @@
 
 body {
     position: relative;
+    overflow-x: clip;
     margin: 0;
     background:
         radial-gradient(ellipse at top, rgba(255,255,255,0.65), transparent 55%),
@@ -22,7 +23,7 @@ img {
 header {
     position: absolute;
     inset: 0 0 auto;
-    z-index: 1;
+    z-index: 3;
     max-width: none;
     margin: 0;
     padding: clamp(24px, 5vw, 72px);
@@ -49,115 +50,127 @@ main {
     gap: 28px 24px;
     max-width: 1160px;
     margin: 0 auto 64px;
-    padding: 100vh 20px 0;
-    padding-top: 100svh;
+    padding: 0 20px;
 }
 
 main > section {
     min-width: 0;
 }
 
-main > section[id="1"] {
-    position: absolute;
+.storySequence {
+    grid-column: 1 / -1;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+}
+
+.storySequence.isScrollAnimated {
+    height: 550vh;
+    height: 550svh;
+}
+
+.storyStage {
+    display: grid;
+}
+
+.storySequence.isScrollAnimated .storyStage {
+    position: sticky;
     top: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
+    z-index: 2;
     height: 100vh;
     height: 100svh;
-}
-
-main > section[id="1"] img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-main > section[id="2"],
-main > section[id="3"] {
-    grid-column: 1 / -1;
     overflow: hidden;
-    aspect-ratio: 2 / 1;
     background: #e8dfd1;
-    border: 8px solid #fffdf9;
-    box-shadow: 0 5px 16px rgba(38, 34, 31, 0.1);
 }
 
-main > section[id="2"] img,
-main > section[id="3"] img {
-    
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-main > section[id="4"] {
-    grid-column: span 5;
-    align-self: stretch;
-    padding: clamp(22px, 4vw, 40px);
-    background: #fffdf9;
-    border-left: 4px solid #a15d36;
-    box-shadow: 0 5px 16px rgba(38, 34, 31, 0.08);
-}
-
-main > section[id="4"] h2,
-main > section[id="6"] h2 {
-    margin: 0 0 14px;
-    color: #332a24;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
-    font-weight: 500;
-    line-height: 1.15;
-}
-
-main > section[id="4"] p {
+.storySlide {
+    position: relative;
+    min-height: 75svh;
     margin: 0;
-    color: #514840;
-    font-size: 1.05rem;
-    line-height: 1.8;
-}
-
-main > section[id="5"] {
-    grid-column: span 7;
-    min-height: 280px;
     overflow: hidden;
-    border: 8px solid #fffdf9;
-    box-shadow: 0 5px 16px rgba(38, 34, 31, 0.1);
+    background: #292521;
 }
 
-main > section[id="5"] img {
+.storySlide > img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    min-height: 264px;
     object-fit: cover;
 }
 
-body.scrollFadesReady main > section[id="2"],
-body.scrollFadesReady main > section[id="3"] {
+.storySequence.isScrollAnimated .storySlide {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
     opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 900ms ease, transform 900ms ease;
+    pointer-events: none;
 }
 
-body.scrollFadesReady main > section[id="2"].isVisible,
-body.scrollFadesReady main > section[id="3"].isVisible {
-    opacity: 1;
-    transform: translateY(0);
+.storySequence.isScrollAnimated .storySlide.isCurrent {
+    pointer-events: auto;
 }
 
-main > section[id="6"] {
-    grid-column: 1 / -1;
-    padding: clamp(20px, 4vw, 34px);
-    background: #fffdf9;
-    border: 1px solid #e4dbce;
-    box-shadow: 0 5px 16px rgba(38, 34, 31, 0.08);
+.storyPhotoCopy::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(20, 17, 15, 0.72), rgba(20, 17, 15, 0.08));
+    content: "";
 }
 
-main > section[id="6"] video {
-    display: block;
+.storyCopy {
+    position: absolute;
+    z-index: 1;
+    bottom: clamp(32px, 8vh, 96px);
+    left: clamp(24px, 8vw, 112px);
+    width: min(620px, calc(100% - 48px));
+    padding: clamp(24px, 4vw, 48px);
+    color: #fff;
+    background: rgba(36, 31, 27, 0.58);
+    border-left: 4px solid #d59a70;
+    backdrop-filter: blur(4px);
+}
+
+.storyCopy h2,
+.storyVideo h2 {
+    margin: 0 0 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+.storyCopy p {
+    margin: 0;
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    line-height: 1.75;
+}
+
+.storyVideo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: clamp(20px, 5vw, 64px);
+    color: #fff;
+}
+
+.storyVideo::before {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 17, 15, 0.48);
+    content: "";
+}
+
+.storyVideo h2,
+.storyVideo video {
+    position: relative;
+    z-index: 1;
+}
+
+.storyVideo video {
     width: 100%;
-    max-height: 560px;
-    background: #e8dfd1;
+    max-height: 72vh;
+    background: #151515;
 }
 
 section[id="7"].wallGallery {
@@ -377,21 +390,21 @@ section[id="7"] .wallCopyFinalCopy {
     main {
         grid-template-columns: 1fr;
         gap: 18px;
-        padding: 100vh 14px 0;
-        padding-top: 100svh;
+        padding: 0 14px;
     }
 
     main > section{
         grid-column: 1;
     }
 
-    main > section[id="2"],
-    main > section[id="3"] {
-        aspect-ratio: 4 / 3;
+    .storyCopy {
+        left: 18px;
+        bottom: 24px;
+        width: calc(100% - 36px);
     }
 
-    main > section[id="5"] {
-        min-height: 220px;
+    .storyVideo {
+        padding: 20px;
     }
 
     section[id="7"].wallGallery {
@@ -453,10 +466,21 @@ section[id="7"] .wallCopyFinalCopy {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    body.scrollFadesReady main > section[id="2"],
-    body.scrollFadesReady main > section[id="3"] {
+    .storySequence.isScrollAnimated {
+        height: auto;
+    }
+
+    .storySequence.isScrollAnimated .storyStage {
+        position: relative;
+        height: auto;
+        overflow: visible;
+    }
+
+    .storySequence.isScrollAnimated .storySlide {
+        position: relative;
+        inset: auto;
+        min-height: 75svh;
         opacity: 1;
-        transform: none;
-        transition: none;
+        pointer-events: auto;
     }
 }

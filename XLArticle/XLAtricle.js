@@ -1,21 +1,50 @@
-const fadeSections = document.querySelectorAll(
-    'main > section[id="2"], main > section[id="3"]'
-);
+const storySequence = document.querySelector(".storySequence");
+const storySlides = storySequence?.querySelectorAll(".storySlide");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-if ("IntersectionObserver" in window) {
-    document.body.classList.add("scrollFadesReady");
+if (storySequence && storySlides?.length && !reduceMotion) {
+    storySequence.classList.add("isScrollAnimated");
 
-    const fadeObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                entry.target.classList.toggle("isVisible", entry.isIntersecting);
-            });
-        },
-        {
-            threshold: 0.15,
-            rootMargin: "0px 0px -8% 0px"
+    const updateStory = () => {
+        const sequenceTop = storySequence.getBoundingClientRect().top + window.scrollY;
+        const scrollRange = Math.max(storySequence.offsetHeight - window.innerHeight, 1);
+        const scrollProgress = Math.min(Math.max((window.scrollY - sequenceTop) / scrollRange, 0), 1);
+        const transitionProgress = Math.min(scrollProgress / 0.86, 1) * (storySlides.length - 1);
+        const activeIndex = Math.floor(transitionProgress);
+        const nextIndex = Math.min(activeIndex + 1, storySlides.length - 1);
+        const crossfadeProgress = transitionProgress - activeIndex;
+        const sequenceOpacity = Math.min((1 - scrollProgress) / 0.14, 1);
+
+        storySlides.forEach((slide, index) => {
+            let opacity = 0;
+
+            if (index === activeIndex) {
+                opacity = 1 - crossfadeProgress;
+            } else if (index === nextIndex && nextIndex !== activeIndex) {
+                opacity = crossfadeProgress;
+            }
+
+            slide.style.opacity = String(opacity * sequenceOpacity);
+            slide.classList.toggle("isCurrent", index === activeIndex && sequenceOpacity > 0);
+            slide.setAttribute("aria-hidden", String(index !== activeIndex || sequenceOpacity === 0));
+            slide.inert = index !== activeIndex || sequenceOpacity === 0;
+        });
+    };
+
+    let updateScheduled = false;
+    const scheduleStoryUpdate = () => {
+        if (updateScheduled) {
+            return;
         }
-    );
 
-    fadeSections.forEach((section) => fadeObserver.observe(section));
+        updateScheduled = true;
+        window.requestAnimationFrame(() => {
+            updateStory();
+            updateScheduled = false;
+        });
+    };
+
+    updateStory();
+    window.addEventListener("scroll", scheduleStoryUpdate, { passive: true });
+    window.addEventListener("resize", scheduleStoryUpdate);
 }
