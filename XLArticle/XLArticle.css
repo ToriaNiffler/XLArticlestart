@@ -2,14 +2,23 @@
     box-sizing: border-box;
 }
 
+:root {
+    color-scheme: light;
+    --page: #f4f0ea;
+    --surface: #fbf9f5;
+    --ink: #292521;
+    --muted: #625a52;
+    --accent: #a15d36;
+    --line: #ded6cb;
+    --shadow: 0 10px 28px rgba(48, 39, 31, 0.08);
+}
+
 body {
     position: relative;
     overflow-x: clip;
     margin: 0;
-    background:
-        radial-gradient(ellipse at top, rgba(255,255,255,0.65), transparent 55%),
-        #f4f0ea;
-    color: #292521;
+    background: var(--page);
+    color: var(--ink);
     font-family: "Segoe UI", Arial, sans-serif;
     line-height: 1.6;
 }
@@ -64,8 +73,8 @@ main > section {
 }
 
 .storySequence.isScrollAnimated {
-    height: 550vh;
-    height: 550svh;
+    height: 1000vh;
+    height: 1000svh;
 }
 
 .storyStage {
@@ -110,6 +119,49 @@ main > section {
     pointer-events: auto;
 }
 
+.videoSequence {
+    grid-column: 1 / -1;
+    width: 100vw;
+    height: 180vh;
+    height: 180svh;
+    margin-left: calc(50% - 50vw);
+}
+
+.storyVideo {
+    position: sticky;
+    top: 0;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background: #080808;
+}
+
+.storyVideo h2 {
+    position: absolute;
+    z-index: 2;
+    top: clamp(24px, 5vh, 56px);
+    left: clamp(24px, 6vw, 80px);
+    margin: 0;
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    font-weight: 500;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.75);
+}
+
+.storyVideo video {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    max-height: 100svh;
+    background: #080808;
+    object-fit: contain;
+}
+
 .storyPhotoCopy::after {
     position: absolute;
     inset: 0;
@@ -130,8 +182,7 @@ main > section {
     backdrop-filter: blur(4px);
 }
 
-.storyCopy h2,
-.storyVideo h2 {
+.storyCopy h2 {
     margin: 0 0 14px;
     font-family: Georgia, "Times New Roman", serif;
     font-size: clamp(2rem, 5vw, 4rem);
@@ -145,52 +196,17 @@ main > section {
     line-height: 1.75;
 }
 
-.storyVideo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 20px;
-    padding: clamp(20px, 5vw, 64px);
-    color: #fff;
-}
-
-.storyVideo::before {
-    position: absolute;
-    inset: 0;
-    background: rgba(20, 17, 15, 0.48);
-    content: "";
-}
-
-.storyVideo h2,
-.storyVideo video {
-    position: relative;
-    z-index: 1;
-}
-
-.storyVideo video {
-    width: 100%;
-    max-height: 72vh;
-    background: #151515;
-}
-
 section[id="7"].wallGallery {
     grid-column: 1 / -1;
     width: 100%;
     max-width: none;
     margin: 8px auto 0;
-    background: #f7f5f3;
-    border: 1px solid #dcd7d1;
-    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.8);
-    padding: 26px 24px 20px;
+    padding: clamp(24px, 4vw, 48px);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--accent);
+    box-shadow: var(--shadow);
     position: relative;
-}
-
-section[id="7"].wallGallery::before {
-    content: "";
-    position: absolute;
-    inset: 12px;
-    border: 1px solid rgba(90, 84, 76, 0.12);
-    pointer-events: none;
 }
 
 section[id="7"] .wallRow,
@@ -200,9 +216,9 @@ section[id="7"] .wallBottom {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(24px, 5vw, 64px);
     align-items: center;
-    margin-bottom: 34px;
-    padding: 8px 0 26px;
-    border-bottom: 1px solid rgba(108, 102, 96, 0.18);
+    margin-bottom: 32px;
+    padding: 8px 0 28px;
+    border-bottom: 1px solid var(--line);
     position: relative;
     z-index: 1;
 }
@@ -223,55 +239,32 @@ section[id="7"] .wallRow .wallCopy {
 
 section[id="7"] .wallRowReverse .wallFrame {
     grid-column: 2;
+    grid-row: 1;
 }
 
 section[id="7"] .wallRowReverse .wallCopy {
     grid-column: 1;
+    grid-row: 1;
 }
 
 section[id="7"] .wallFrame {
     position: relative;
     width: 100%;
-    max-width: 360px;
+    max-width: 440px;
     margin: 0;
-    background: #ffffff;
-    border: 8px solid #ffffff;
-    box-shadow: 0 8px 18px rgba(38, 34, 31, 0.12), 0 0 0 1px rgba(60, 53, 46, 0.15);
+    background: var(--surface);
+    border: 6px solid #fff;
+    border-radius: 3px;
+    box-shadow: var(--shadow);
     padding: 0;
-    transform: rotate(-1.4deg);
 }
 
 section[id="7"] .wallRowReverse .wallFrame {
     justify-self: end;
-    transform: rotate(1.2deg);
 }
 
 section[id="7"] .wallBottom .wallFrameSmall {
     justify-self: center;
-}
-
-section[id="7"] .wallFrame::before {
-    content: "";
-    position: absolute;
-    top: -16px;
-    left: 50%;
-    width: 2px;
-    height: 18px;
-    background: #b7b0a5;
-    transform: translateX(-50%);
-}
-
-section[id="7"] .wallFrame::after {
-    content: "";
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #d7d1c8;
-    box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
-    transform: translateX(-50%);
 }
 
 section[id="7"] .wallFrame img {
@@ -299,9 +292,9 @@ section[id="7"] .wallFrameSmall img {
 }
 
 section[id="7"] .wallCopy {
-    font-size: clamp(1rem, 1.15vw, 1.15rem);
+    font-size: 1.05rem;
     line-height: 1.75;
-    color: #2c2a2a;
+    color: var(--muted);
     margin: 0;
     max-width: 560px;
 }
@@ -336,9 +329,11 @@ section[id="7"] .wallFrameSmall img {
 section[id="7"] .wallCopyFinalCopy {
     max-width: 760px;
     margin: 0 auto;
-    padding: 18px 22px;
-    background: rgba(255, 255, 255, 0.65);
-    border-left: 3px solid #a15d36;
+    padding: 20px 24px;
+    background: #f4f0ea;
+    border-left: 3px solid var(--accent);
+    border-radius: 2px;
+    color: var(--muted);
     font-size: 1.05rem;
     line-height: 1.7;
 }
@@ -349,25 +344,30 @@ section[id="7"] .wallCopyFinalCopy {
     grid-template-columns: minmax(0, 1.5fr) minmax(240px, 0.8fr);
     gap: 20px 32px;
     align-items: center;
-    max-width: 1050px;
-    margin: 64px auto 40px;
-    padding: 28px;
-    background: #fff;
-    border-top: 4px solid #a15d36;
-    box-shadow: 0 8px 24px rgba(38, 34, 31, 0.08);
+    max-width: none;
+    margin: 8px auto 40px;
+    padding: clamp(24px, 4vw, 48px);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--accent);
+    box-shadow: var(--shadow);
 }
 
 [id="8"] h2 {
     grid-column: 1 / -1;
     margin: 0;
     padding-bottom: 14px;
-    border-bottom: 1px solid #e6dfd5;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 500;
     line-height: 1.1;
 }
 
 [id="8"] p {
     margin: 0;
-    color: #36312d;
+    color: var(--muted);
     font-size: 1rem;
     line-height: 1.7;
     white-space: pre-line;
@@ -378,8 +378,9 @@ section[id="7"] .wallCopyFinalCopy {
     height: 100%;
     max-height: 390px;
     object-fit: cover;
-    border: 8px solid #f7f3ed;
-    box-shadow: 0 5px 16px rgba(38, 34, 31, 0.14);
+    border: 6px solid #fff;
+    border-radius: 3px;
+    box-shadow: var(--shadow);
 }
 
 @media (max-width: 680px) {
@@ -401,14 +402,6 @@ section[id="7"] .wallCopyFinalCopy {
         left: 18px;
         bottom: 24px;
         width: calc(100% - 36px);
-    }
-
-    .storyVideo {
-        padding: 20px;
-    }
-
-    section[id="7"].wallGallery {
-        padding: 22px 16px 18px;
     }
 
     section[id="7"] .wallRow,
@@ -444,14 +437,14 @@ section[id="7"] .wallCopyFinalCopy {
     }
 
     section[id="7"] .wallCopyFinalCopy {
-        padding: 16px;
+        padding: 16px 18px;
     }
 
     [id="8"] {
         grid-template-columns: 1fr;
         gap: 16px;
-        margin: 40px auto 28px;
-        padding: 20px;
+        margin: 8px auto 28px;
+        padding: 24px 18px;
     }
 
     [id="8"] h2 {
@@ -482,5 +475,13 @@ section[id="7"] .wallCopyFinalCopy {
         min-height: 75svh;
         opacity: 1;
         pointer-events: auto;
+    }
+
+    .videoSequence {
+        height: auto;
+    }
+
+    .videoSequence .storyVideo {
+        position: relative;
     }
 }
